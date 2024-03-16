@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 conn = sqlite3.connect('datos.db')
 
 # Leer los datos de la tabla
-df = pd.read_sql_query('''SELECT u.id_usuario, u.permisos, f.fecha
+df = pd.read_sql_query('''SELECT u.nombre_usuario, u.id_usuario, u.permisos, f.fecha
                                    FROM usuarios u INNER JOIN fechas f ON f.id_usuario=u.id_usuario
                                    ''', conn)
 
@@ -41,18 +41,20 @@ media_tiempo_por_usuario_priv = df_perm_1_order.groupby('id_usuario')['diferenci
 plt.figure(figsize=(10, 6))
 
 plt.subplot(1, 2, 1)
+media_tiempo_por_usuario_normal.index = df_perm_0_order.groupby('id_usuario')['nombre_usuario'].first()
 media_tiempo_por_usuario_normal.plot(kind='bar', color='skyblue')
 plt.title('Media de Días por Usuario Normal')
-plt.xlabel('ID de Usuario')
+plt.xlabel('Nombre de Usuario')
 plt.ylabel('Media de Días')
-plt.xticks(rotation=45)
+plt.xticks(rotation=65, fontsize=8)
 
 plt.subplot(1, 2, 2)
+media_tiempo_por_usuario_priv.index = df_perm_1_order.groupby('id_usuario')['nombre_usuario'].first()
 media_tiempo_por_usuario_priv.plot(kind='bar', color='lightgreen')
 plt.title('Media de Días por Usuario Administrador')
-plt.xlabel('ID de Usuario')
+plt.xlabel('Nombre de Usuario')
 plt.ylabel('Media de Días')
-plt.xticks(rotation=45)
+plt.xticks(rotation=65, fontsize=7)
 
 plt.tight_layout()
 plt.show()
