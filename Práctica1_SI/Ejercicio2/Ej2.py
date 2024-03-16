@@ -81,3 +81,22 @@ for usuario in usuarios:
             if contrasena == hash_pass:
                 contrasena_segura = 0
                 break
+# Insertar usuario
+    c.execute('''INSERT INTO usuarios (nombre_usuario, telefono, contrasena, contrasena_segura, provincia, permisos)
+                 VALUES (?, ?, ?, ?, ?, ?)''', (nombre_usuario, telefono, contrasena, contrasena_segura, provincia, permisos))
+    id_usuario = c.lastrowid
+
+    # Insertar emails
+    c.execute('''INSERT INTO emails (id_usuario, total, phishing, cliclados)
+                 VALUES (?, ?, ?, ?)''', (id_usuario, total_emails, phishing_emails, cliclados_emails))
+
+    # Insertar fechas
+    for fecha in fechas:
+        c.execute('''INSERT INTO fechas (id_usuario, fecha)
+                     VALUES (?, ?)''', (id_usuario, fecha))
+
+    # Insertar IPs
+    for ip in ips:
+        if ip != "N" and ip != "o" and ip != "n" and ip != "e":
+            c.execute('''INSERT INTO ips (id_usuario, ip)
+                         VALUES (?, ?)''', (id_usuario, ip))
