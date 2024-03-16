@@ -48,3 +48,12 @@ c.execute('''CREATE TABLE legal (
                 proteccion_datos INTEGER,
                 creacion INTEGER
             )''')
+
+# Leer datos del archivo JSON
+with open('users_data_online.json') as f:
+    data = json.load(f)
+    usuarios = data['usuarios']
+
+with open('legal_data_online.json') as f:
+    data = json.load(f)
+    legal = data['legal']
