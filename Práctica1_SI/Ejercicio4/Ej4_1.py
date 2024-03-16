@@ -37,3 +37,22 @@ media_tiempo_por_usuario_priv = df_perm_1_order.groupby('id_usuario')['diferenci
 # print(media_tiempo_por_usuario_normal)
 # print(media_tiempo_por_usuario_priv)
 
+# Gráficos de barras
+plt.figure(figsize=(10, 6))
+
+plt.subplot(1, 2, 1)
+media_tiempo_por_usuario_normal.plot(kind='bar', color='skyblue')
+plt.title('Media de Días por Usuario Normal')
+plt.xlabel('ID de Usuario')
+plt.ylabel('Media de Días')
+plt.xticks(rotation=45)
+
+plt.subplot(1, 2, 2)
+media_tiempo_por_usuario_priv.plot(kind='bar', color='lightgreen')
+plt.title('Media de Días por Usuario Administrador')
+plt.xlabel('ID de Usuario')
+plt.ylabel('Media de Días')
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
