@@ -81,7 +81,8 @@ for usuario in usuarios:
             if contrasena == hash_pass:
                 contrasena_segura = 0
                 break
-# Insertar usuario
+
+    # Insertar usuario
     c.execute('''INSERT INTO usuarios (nombre_usuario, telefono, contrasena, contrasena_segura, provincia, permisos)
                  VALUES (?, ?, ?, ?, ?, ?)''', (nombre_usuario, telefono, contrasena, contrasena_segura, provincia, permisos))
     id_usuario = c.lastrowid
@@ -100,3 +101,17 @@ for usuario in usuarios:
         if ip != "N" and ip != "o" and ip != "n" and ip != "e":
             c.execute('''INSERT INTO ips (id_usuario, ip)
                          VALUES (?, ?)''', (id_usuario, ip))
+
+for pagina in legal:
+    web, datos = pagina.popitem()
+    cookies = datos["cookies"]
+    aviso = datos["aviso"]
+    proteccion_datos = datos["proteccion_de_datos"]
+    creacion = datos["creacion"]
+
+    c.execute('''INSERT INTO legal (web, cookies, aviso, proteccion_datos, creacion)
+                     VALUES (?, ?, ?, ?, ?)''', (web, cookies, aviso, proteccion_datos, creacion))
+
+# Guardar cambios y cerrar conexión
+conn.commit()
+conn.close()
