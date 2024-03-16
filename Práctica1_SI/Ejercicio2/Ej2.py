@@ -57,3 +57,27 @@ with open('users_data_online.json') as f:
 with open('legal_data_online.json') as f:
     data = json.load(f)
     legal = data['legal']
+
+# Insertar datos en la base de datos
+for usuario in usuarios:
+    nombre_usuario, datos = usuario.popitem()
+    telefono = datos['telefono']
+    contrasena = datos['contrasena']
+    provincia = datos['provincia']
+    permisos = datos['permisos']
+    fechas = datos['fechas']
+    ips = datos['ips']
+    total_emails = datos['emails']['total']
+    phishing_emails = datos['emails']['phishing']
+    cliclados_emails = datos['emails']['cliclados']
+
+    contrasena_segura = 1
+    with open('rockyou-20.txt') as f:
+        for line in f.readlines():
+            line = line.strip()
+            line = line.encode('utf-8')
+            hash_pass = hashlib.md5(line)
+            hash_pass = hash_pass.hexdigest()
+            if contrasena == hash_pass:
+                contrasena_segura = 0
+                break
