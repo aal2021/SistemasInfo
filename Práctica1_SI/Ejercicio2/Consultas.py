@@ -5,13 +5,15 @@ import sqlite3
 conn = sqlite3.connect('datos.db')
 
 # Calcular el número de muestras
-df_muestras = pd.read_sql_query('''SELECT COUNT(DISTINCT id_usuario) AS num_muestras FROM usuarios''', conn)
-n_muestras = df_muestras.values[0][0]
-print("Número de Muestras: %d" % n_muestras)
+df_muestras = pd.read_sql_query('''SELECT * FROM usuarios''', conn)
+n_usuarios = df_muestras["id_usuario"].count()
+df_muestras_null = (df_muestras=="None").sum()
+n_muestras = df_muestras_null.sum()
+print("Número de Usuarios: %d" % n_usuarios)
+print("Número de valores missing: %d" % n_muestras)
 print("---------------------------------------------------------------")
 
 
-#SUM((COUNT(fecha) - AVG(COUNT(fecha))) * (COUNT(fecha) - AVG(COUNT(fecha)))) / (COUNT(fecha) - 1) AS desviacion_fechas
 # Calcular media y desviación estándar de fechas
 df_fechas = pd.read_sql_query('''SELECT COUNT(fecha) AS num_fechas_user  
                                    FROM fechas

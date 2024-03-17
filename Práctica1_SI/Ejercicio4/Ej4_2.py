@@ -18,7 +18,6 @@ def generar_grafico2():
 
     # Seleccionar los 10 usuarios más críticos (con contraseñas débiles y alta probabilidad de spam)
     usuarios_criticos = usuarios_debiles.nlargest(10, 'probabilidad_spam')
-    print(usuarios_criticos)
 
     # Graficar los resultados
     plt.figure(figsize=(10, 6))
