@@ -20,7 +20,3 @@ def usuariosCriticos(n):
 
     # Retornar el informe como una cadena
     return usuarios_criticos.to_string()
-
-
-
-

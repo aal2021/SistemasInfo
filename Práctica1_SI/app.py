@@ -7,7 +7,10 @@ from Ejercicio4.Ej4_1 import generar_grafico1
 from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
 from Ejercicio4.Ej4_4 import generar_grafico4
-from Práctica1_SI.Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
+from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
+from fpdf import FPDF
+
+
 
 app = Flask(__name__)
 
@@ -54,24 +57,24 @@ def generar_pdf():
         # Generar informe de usuarios críticos
         informe_usuarios = usuariosCriticos(num_elementos)
 
-        # Crear un nuevo PDF
-        buffer = io.BytesIO()
-        c = canvas.Canvas(buffer)
+        with open('usuarios_criticos.txt', 'w') as file:
+            file.write(informe_usuarios)
 
-        # Agregar contenido al PDF
-        c.drawString(100, 750, "Informe de Usuarios Críticos:")
-        c.drawString(100, 700, informe_usuarios)
+        # Convertir el archivo de texto en PDF
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
 
-        c.save()
+        with open('usuarios_criticos.txt', 'r') as file:
+            for line in file:
+                pdf.cell(200, 10, txt=line, ln=True)
 
-        # Construir la respuesta con el PDF generado
-        buffer.seek(0)
-        response = make_response(buffer.getvalue())
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = 'attachment; filename=informe.pdf'
+        pdf.output("usuarios_criticos.pdf")
 
-        return response
+        #Si es POST devuelve el PDF
+        return send_file("usuarios_criticos.pdf", as_attachment=True)
 
+    #Si es GET devuelve la plantilla
     return render_template('generador_pdf.html')
 
 if __name__ == '__main__':
