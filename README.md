@@ -1,7 +1,5 @@
-# SistemasInfo1
-Práctica 1: Recopilación, estructuración y análisis de datos
-
-*Requisito: Python 3.11*
+# Sistemas de Información
+Práctica 2: Representación de los datos
 
 ## Funciones Flask
 Una vez ejecutado app.py, acceder a los resultados mediante las siguientes direcciones:
