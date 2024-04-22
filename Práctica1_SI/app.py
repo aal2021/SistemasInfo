@@ -7,6 +7,7 @@ from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
 from fpdf import FPDF
 
+app = Flask(__name__)
 
 @app.route('/')
 def index():
