@@ -5,6 +5,7 @@ from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
 from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
+from Ejercicio4_Practica2.GeneradorPDFs import paginaWebVulnerable
 from fpdf import FPDF
 
 app = Flask(__name__)
@@ -61,9 +62,13 @@ def generar_pdf():
 
         # Generar informe de usuarios críticos
         informe_usuarios = usuariosCriticos(num_elementos)
+        informe_paginas = paginaWebVulnerable(num_elementos)
 
         with open('usuarios_criticos.txt', 'w') as file:
             file.write(informe_usuarios)
+
+        with open('paginas-vulnerables.txt', 'w') as file:
+            file.write(informe_paginas)
 
         # Convertir el archivo de texto en PDF
         pdf = FPDF()
@@ -83,10 +88,15 @@ def generar_pdf():
             for line in file:
                 pdf.cell(180, 10, txt=line, ln=True, border=1, align='C')
 
-        pdf.output("usuarios_criticos.pdf")
+        pdf.ln(11)
+        with open('paginas-vulnerables.txt', 'r') as file:
+            for line in file:
+                pdf.cell(180, 10, txt=line, ln=True, border=1, align='C')
+
+        pdf.output("informe_critico.pdf")
 
         #Si es POST devuelve el PDF
-        return send_file("usuarios_criticos.pdf", as_attachment=True)
+        return send_file("informe_critico.pdf", as_attachment=True)
 
     #Si es GET devuelve la plantilla
     return render_template('generador_pdf.html')
