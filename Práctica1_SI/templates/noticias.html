@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Noticias relaciondas con ciberseguridad</title>
+</head>
+<body>
+    <h1>10 Noticias relacionadas con ciberseguridad</h1>
+    {% for article in articles %}
+    <div>
+        <h2>{{ article.title }}</h2>
+        <p><strong>Fuente:</strong> {{ article.source }}</p>
+        <p><strong>Autor:</strong> {{ article.author }}</p>
+        <p><strong>Descripción:</strong> {{ article.description }}</p>
+        <p><strong>Fecha de publicación:</strong> {{ article.published_at }}</p>
+        <p><strong>URL:</strong> <a href="{{ article.url }}" target="_blank">{{ article.url }}</a></p>
+        <hr>
+    </div>
+    {% endfor %}
+</body>
+</html>

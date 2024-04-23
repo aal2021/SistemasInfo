@@ -1,49 +1,61 @@
 import requests
 
-# Definir los parámetros de la consulta
-url = "https://newsapi.org/v2/everything"
-query = "ciberseguridad"
-api_key = "6e16ba390f2f4d77b7f1950231a07780"  # Nuestra API Key
+def noticasOtraAPI():
 
-# Realizar la consulta a la API
-response = requests.get(url, params={"q": query, "apiKey": api_key})
+    # Definir los parámetros de la consulta
+    url = "https://newsapi.org/v2/everything"
+    query = "ciberseguridad"
+    api_key = "6e16ba390f2f4d77b7f1950231a07780"  # Nuestra API Key
 
-# Verificar si la solicitud fue exitosa
-if response.status_code == 200:
-    # Convertir la respuesta a formato JSON
-    data = response.json()
+    # Realizar la consulta a la API
+    response = requests.get(url, params={"q": query, "apiKey": api_key})
 
-    # Contador para llevar un seguimiento de los artículos mostrados
-    count = 0
+    # Verificar si la solicitud fue exitosa
+    if response.status_code == 200:
+        # Convertir la respuesta a formato JSON
+        data = response.json()
 
-    # Mostrar los detalles de cada artículo que contiene "ciberseguridad" en el título o la descripción
-    for article in data["articles"]:
-        title = article["title"].lower()
-        description = article["description"].lower()
+        # Contador para llevar un seguimiento de los artículos mostrados
+        count = 0
 
-        # Verificar si la palabra "ciberseguridad" está en el título o la descripción
-        if "ciberseguridad" in title or "ciberseguridad" in description:
-            source = article["source"]["name"]
+        # Lista para almacenar los detalles de las noticias recientes
+        articles = []
+
+        # Ordenar las noticias por fecha de publicación en orden descendente
+        sorted_articles = sorted(data["articles"], key=lambda x: x["publishedAt"], reverse=True)
+
+        # Mostrar los detalles de cada artículo que contiene "ciberseguridad" en el título o la descripción
+        for article in sorted_articles:
             title = article["title"]
-            author = article.get("author", "Autor desconocido")
             description = article["description"]
-            published_at = article["publishedAt"]
-            url = article["url"]
 
-            # Mostrar los detalles del artículo
-            print("Fuente:", source)
-            print("Título:", title)
-            print("Autor:", author)
-            print("Descripción:", description)
-            print("Fecha de publicación:", published_at)
-            print("URL:", url)
-            print("-" * 50)  # Separador entre artículos
+            # Verificar si la palabra "ciberseguridad" está en el título o la descripción
+            if "ciberseguridad" or "Ciberseguridad" in title or "ciberseguridad" or "Ciberseguridad "in description:
+                source = article["source"]["name"]
+                title = article["title"]
+                author = article.get("author", "Autor desconocido")
+                description = article["description"]
+                published_at = article["publishedAt"]
+                url = article["url"]
 
-            # Incrementar el contador
-            count += 1
+                # Agregar los detalles del artículo a la lista
+                articles.append({
+                    "title": title,
+                    "source": source,
+                    "author": author,
+                    "description": description,
+                    "published_at": published_at,
+                    "url": url
+                })
 
-            # Verificar si ya se han mostrado 10 artículos
-            if count >= 10:
-                break
-else:
-    print("Error al realizar la solicitud:", response.status_code)
+                # Incrementar el contador
+                count += 1
+
+                # Verificar si ya se han mostrado 10 artículos
+                if count >= 10:
+                    return articles
+
+    else:
+        print("Error al realizar la solicitud:", response.status_code)
+        return []
+

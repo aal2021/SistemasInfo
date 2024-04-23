@@ -4,6 +4,7 @@ from Ejercicio4.Ej4_1 import generar_grafico1
 from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
 from Ejercicio4.Ej4_4 import generar_grafico4
+from Ejercicio4_Practica2.DatosDeOtraAPI import noticasOtraAPI
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
 from Ejercicio4_Practica2.GeneradorPDFs import paginaWebVulnerable
 from fpdf import FPDF
@@ -54,7 +55,7 @@ def root4_4():
     return send_file(img_bytes, mimetype='image/png')
 
 
-@app.route('/GeneradorPDF', methods=['GET', 'POST'])
+@app.route('/GeneradorPDF_Ej4', methods=['GET', 'POST'])
 def generar_pdf():
     if request.method == 'POST':
         # Obtener el número de usuarios a incluir en el informe desde el formulario
@@ -100,6 +101,11 @@ def generar_pdf():
 
     #Si es GET devuelve la plantilla
     return render_template('generador_pdf.html')
+
+@app.route('/Noticias_Ej4')
+def otra_api():
+    articles = noticasOtraAPI()
+    return render_template('noticias.html', articles=articles)
 
 
 if __name__ == '__main__':
