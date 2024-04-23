@@ -8,7 +8,7 @@ def usuariosCriticos(n):
     conn = sqlite3.connect('datos.db')
 
     # Leer los datos relevantes de la base de datos
-    df = pd.read_sql_query('''SELECT u.id_usuario, u.contrasena_segura, (CAST(e.cliclados as float)/e.total)*100 as probabilidad_spam
+    df = pd.read_sql_query('''SELECT u.nombre_usuario, u.contrasena_segura, (CAST(e.cliclados as float)/e.total)*100 as probabilidad_spam
                               FROM usuarios u
                               INNER JOIN emails e ON u.id_usuario = e.id_usuario
                               ''', conn)
@@ -22,9 +22,9 @@ def usuariosCriticos(n):
 
     # Graficar los resultados
     plt.figure(figsize=(10, 6))
-    usuarios_criticos['probabilidad_spam'].plot(kind='bar', color='skyblue')
+    usuarios_criticos.set_index('nombre_usuario')['probabilidad_spam'].plot(kind='bar', color='skyblue')
     plt.title('Los ' + str(n) + ' Usuarios Más Críticos')
-    plt.xlabel('ID de Usuario')
+    plt.xlabel('Nombre de Usuario')
     plt.ylabel('Probabilidad de Hacer Clic en Spam')
     plt.xticks(rotation=45)
     plt.tight_layout()
@@ -35,30 +35,33 @@ def paginaWebVulnerable(n):
     conn = sqlite3.connect('datos.db')
 
     # Leer los datos relevantes de la base de datos
-    df = pd.read_sql_query('''SELECT web, cookies, aviso, proteccion_datos FROM legal''', conn)
+    df = pd.read_sql_query('''SELECT web, cookies, aviso, proteccion_datos, creacion FROM legal''', conn)
 
     # Calcular el número de políticas desactualizadas para cada página web
-    df['politicas_desactualizadas'] = df[['cookies', 'aviso', 'proteccion_datos']].apply(lambda row: sum(row == 0),
-                                                                                         axis=1)
+    df['politicas_desactualizadas'] = df[['cookies', 'aviso', 'proteccion_datos']].apply(lambda row: sum(row == 0), axis=1)
 
     # Seleccionar las 5 páginas web con más políticas desactualizadas
-    top_n_politicas_desactualizadas = df.nlargest(n, 'politicas_desactualizadas')
+    top_n_politicas_desactualizadas = df.nlargest(n, ['politicas_desactualizadas', 'creacion'])
+    print(top_n_politicas_desactualizadas)
 
     # Graficar los resultados
     plt.figure(figsize=(12, 6))
 
     top_n_politicas_desactualizadas.set_index('web', inplace=True)
-    top_n_politicas_desactualizadas.plot(kind='bar')
+    ax = top_n_politicas_desactualizadas['politicas_desactualizadas'].plot(kind='bar')
 
     # Añadir etiquetas y leyendas al gráfico
     plt.title('Las ' + str(n) + ' Páginas Webs Más Vulnerables')
     plt.xlabel('Página Web')
-    plt.ylabel('Estado de las Políticas')
+    plt.ylabel('Número de Políticas Desactualizadas')
     plt.xticks(rotation=45)
-    plt.legend()
+
+    ax.set_yticks(range(0, 4))
+    ax.set_yticklabels(range(0, 4))
 
     plt.tight_layout()
     plt.show()
 
-usuariosCriticos(10)
-paginaWebVulnerable(10)
+
+usuariosCriticos(5)
+paginaWebVulnerable(5)
