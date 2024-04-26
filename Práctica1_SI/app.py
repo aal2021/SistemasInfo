@@ -1,12 +1,13 @@
 import subprocess
 from flask import Flask, render_template, request, make_response, send_file
+
+from Ejercicio1_Practica2.Ejercicio1 import usuariosCriticosGraf, paginaWebVulnerableGraf
 from Ejercicio4.Ej4_1 import generar_grafico1
 from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
 from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.DatosDeOtraAPI import noticasOtraAPI
-from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos
-from Ejercicio4_Practica2.GeneradorPDFs import paginaWebVulnerable
+from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos, paginaWebVulnerable
 from fpdf import FPDF
 
 app = Flask(__name__)
@@ -14,6 +15,26 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/EJ1')
+def root1():
+    return render_template('formulario_graficos.html')
+
+
+@app.route('/grafico1', methods=['POST'])
+def graficos1():
+    data = int(request.form['data'])
+    plot_url = usuariosCriticosGraf(data)
+    return render_template('generador_graficos.html', plot_url=plot_url)
+
+
+@app.route('/grafico2', methods=['POST'])
+def graficos2():
+    data = int(request.form['data'])
+    plot_url = paginaWebVulnerableGraf(data)
+    return render_template('generador_graficos.html', plot_url=plot_url)
+
 
 @app.route('/EJ2')
 def root2():
