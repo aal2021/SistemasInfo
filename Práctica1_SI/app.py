@@ -2,6 +2,7 @@ import subprocess
 from flask import Flask, render_template, request, make_response, send_file
 
 from Ejercicio1_Practica2.Ejercicio1 import usuariosCriticosGraf, paginaWebVulnerableGraf
+from Ejercicio2_Practica2.Ejercicio2 import usuariosCriticosMas50, usuariosCriticosMenos50
 from Ejercicio4.Ej4_1 import generar_grafico1
 from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
@@ -22,15 +23,15 @@ def root1():
     return render_template('formulario_graficos.html')
 
 
-@app.route('/grafico1', methods=['POST'])
-def graficos1():
+@app.route('/grafico1-1', methods=['POST'])
+def graficos1_1():
     data = int(request.form['data'])
     plot_url = usuariosCriticosGraf(data)
     return render_template('generador_graficos.html', plot_url=plot_url)
 
 
-@app.route('/grafico2', methods=['POST'])
-def graficos2():
+@app.route('/grafico1-2', methods=['POST'])
+def graficos1_2():
     data = int(request.form['data'])
     plot_url = paginaWebVulnerableGraf(data)
     return render_template('generador_graficos.html', plot_url=plot_url)
@@ -38,10 +39,21 @@ def graficos2():
 
 @app.route('/EJ2')
 def root2():
-    output = subprocess.check_output(['python', 'Ejercicio2/Consultas.py'])
-    output2 = output.decode("latin1")
-    output3 = output2.replace('\n', '<br>')
-    return output3
+    return render_template('formulario_graficos2.html')
+
+
+@app.route('/grafico2-1', methods=['POST'])
+def graficos2_1():
+    data = int(request.form['data'])
+    plot_url = usuariosCriticosMas50(data)
+    return render_template('generador_graficos.html', plot_url=plot_url)
+
+
+@app.route('/grafico2-2', methods=['POST'])
+def graficos2_2():
+    data = int(request.form['data'])
+    plot_url = usuariosCriticosMenos50(data)
+    return render_template('generador_graficos.html', plot_url=plot_url)
 
 
 @app.route('/EJ3')

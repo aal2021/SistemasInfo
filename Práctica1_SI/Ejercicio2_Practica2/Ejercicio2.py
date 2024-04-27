@@ -1,9 +1,12 @@
+import base64
 import sqlite3
+from io import BytesIO
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def usuariosCriticosMas50(n):
 
+def usuariosCriticosMas50(n):
     # Conectar con la base de datos SQLite
     conn = sqlite3.connect('datos.db')
 
@@ -13,8 +16,9 @@ def usuariosCriticosMas50(n):
                               INNER JOIN emails e ON u.id_usuario = e.id_usuario
                               ''', conn)
 
-    # Identificar usuarios con contraseñas débiles (aquí necesitarás definir cómo determinar las contraseñas débiles)
-    usuarios_debiles = df[df['contrasena_segura']==0]
+    # Identificar usuarios con contraseñas débiles
+    df['contrasena_segura'] = df['contrasena_segura']
+    usuarios_debiles = df[df['contrasena_segura'] == False]
 
     # Seleccionar los 10 usuarios más críticos (con contraseñas débiles y alta probabilidad de spam)
     usuarios_criticos = usuarios_debiles.nlargest(n, 'probabilidad_spam')
@@ -30,10 +34,16 @@ def usuariosCriticosMas50(n):
     plt.ylabel('Probabilidad de Hacer Clic en Spam')
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.show()
+
+    # Convertir el gráfico a una imagen base64 para mostrarlo en la página web
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    return plot_url
+
 
 def usuariosCriticosMenos50(n):
-
     # Conectar con la base de datos SQLite
     conn = sqlite3.connect('datos.db')
 
@@ -43,8 +53,9 @@ def usuariosCriticosMenos50(n):
                               INNER JOIN emails e ON u.id_usuario = e.id_usuario
                               ''', conn)
 
-    # Identificar usuarios con contraseñas débiles (aquí necesitarás definir cómo determinar las contraseñas débiles)
-    usuarios_debiles = df[df['contrasena_segura']==0]
+    # Identificar usuarios con contraseñas débiles
+    df['contrasena_segura'] = df['contrasena_segura']
+    usuarios_debiles = df[df['contrasena_segura'] == False]
 
     # Seleccionar los 10 usuarios más críticos (con contraseñas débiles y alta probabilidad de spam)
     usuarios_criticos = usuarios_debiles.nlargest(n, 'probabilidad_spam')
@@ -60,7 +71,10 @@ def usuariosCriticosMenos50(n):
     plt.ylabel('Probabilidad de Hacer Clic en Spam')
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.show()
 
-usuariosCriticosMas50(10)
-usuariosCriticosMenos50(10)
+    # Convertir el gráfico a una imagen base64 para mostrarlo en la página web
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    return plot_url
