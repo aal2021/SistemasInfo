@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, make_response, send_file
 
 from Ejercicio1_Practica2.Ejercicio1 import usuariosCriticosGraf, paginaWebVulnerableGraf
 from Ejercicio2_Practica2.Ejercicio2 import usuariosCriticosMas50, usuariosCriticosMenos50
+from Ejercicio3_Practica2.Ejercicio3_Practica2 import obtener_ultimas_vulnerabilidades
 from Ejercicio4.Ej4_1 import generar_grafico1
 from Ejercicio4.Ej4_2 import generar_grafico2
 from Ejercicio4.Ej4_3 import generar_grafico3
@@ -58,10 +59,12 @@ def graficos2_2():
 
 @app.route('/EJ3')
 def root3():
-    output = subprocess.check_output(['python', 'Ejercicio3/EJ3.py'])
-    output2 = output.decode("latin1")
-    output3 = output2.replace('\n', '<br>')
-    return output3
+    vulnerabilidades = obtener_ultimas_vulnerabilidades()
+
+    if vulnerabilidades:
+        return render_template('vulnerabilidades.html', vulnerabilidades=vulnerabilidades)
+    else:
+        return "Error al obtener las vulnerabilidades."
 
 
 @app.route('/EJ4/1')

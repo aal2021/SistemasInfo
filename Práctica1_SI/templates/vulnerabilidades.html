@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Últimas Vulnerabilidades</title>
+</head>
+<body>
+    <h1>Últimas Vulnerabilidades</h1>
+    <ul>
+        {% for vulnerabilidad in vulnerabilidades %}
+        <li>
+            <strong>Vulnerabilidad #{{ loop.index }}</strong>
+            <br>
+            CVE-ID: {{ vulnerabilidad.id }}
+            <br>
+            Descripción: {{ vulnerabilidad.summary }}
+            <br><br>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
