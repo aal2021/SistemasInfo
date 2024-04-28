@@ -94,7 +94,7 @@ def predecir_decisionTree(clf, nombre, telefono, provincia, permisos, total, phi
 
 def forest(X, y):
     # Entrenar el modelo de bosque aleatorio
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=89)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.6, random_state=24)
     clf = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
     clf.fit(X_train, y_train)
 
