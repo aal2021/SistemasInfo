@@ -20,7 +20,7 @@ def usuariosCriticosMas50(n):
     df['contrasena_segura'] = df['contrasena_segura']
     usuarios_debiles = df[df['contrasena_segura'] == False]
 
-    # Seleccionar los 10 usuarios más críticos (con contraseñas débiles y alta probabilidad de spam)
+    # Seleccionar los n usuarios más críticos (con contraseñas débiles y alta probabilidad de spam)
     usuarios_criticos = usuarios_debiles.nlargest(n, 'probabilidad_spam')
 
     usuarios_criticos_mas50 = usuarios_criticos[usuarios_criticos['probabilidad_spam'] > 50]

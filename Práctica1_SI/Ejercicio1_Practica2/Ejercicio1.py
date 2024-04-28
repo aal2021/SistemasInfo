@@ -54,7 +54,7 @@ def paginaWebVulnerableGraf(n):
     df['politicas_desactualizadas'] = df[['cookies', 'aviso', 'proteccion_datos']].apply(lambda row: sum(row == 0),
                                                                                          axis=1)
 
-    # Seleccionar las 5 páginas web con más políticas desactualizadas
+    # Seleccionar las n páginas web con más políticas desactualizadas
     top_n_politicas_desactualizadas = df.nlargest(n, ['politicas_desactualizadas', 'creacion'])
     print(top_n_politicas_desactualizadas)
 
