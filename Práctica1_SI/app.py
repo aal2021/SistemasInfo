@@ -11,6 +11,7 @@ from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.DatosDeOtraAPI import noticasOtraAPI
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos, paginaWebVulnerable
 from fpdf import FPDF
+from Ejercicio5_Practica2 import Ejercicio5
 
 app = Flask(__name__)
 
@@ -142,6 +143,40 @@ def generar_pdf():
 def otra_api():
     articles = noticasOtraAPI()
     return render_template('noticias.html', articles=articles)
+
+
+@app.route('/EJ5', methods=['GET', 'POST'])
+def predict():
+    if request.method == 'GET':
+        return render_template('formulario_ejercicio5.html')
+    else:
+        nombre = request.form['nombre']
+        telefono = request.form['telefono']
+        provincia = request.form['provincia']
+        permisos = request.form['permisos']
+        total = int(request.form['total'])
+        phishing = int(request.form['phishing'])
+        cliclados = int(request.form['cliclados'])
+        modelo = request.form['modelo']
+
+        # Lógica para seleccionar el modelo y hacer la predicción
+        if modelo == 'regresion':
+            resultado = Ejercicio5.predecir_regresion(Ejercicio5.regr_model, nombre, telefono, provincia, permisos,
+                                                      total, phishing, cliclados)
+        elif modelo == 'tree':
+            resultado = Ejercicio5.predecir_decisionTree(Ejercicio5.tree_model, nombre, telefono, provincia, permisos,
+                                                         total, phishing, cliclados)
+        elif modelo == 'forest':
+            resultado = Ejercicio5.predecirForest(Ejercicio5.forest_model, nombre, telefono, provincia, permisos, total,
+                                                  phishing, cliclados)
+
+        if resultado:
+            mensaje = "El usuario es crítico."
+        else:
+            mensaje = "El usuario no es crítico."
+
+        return mensaje
+
 
 
 if __name__ == '__main__':
