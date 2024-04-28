@@ -212,14 +212,15 @@ def predict():
         tree_model = decisionTree(X, y)
         forest_model = forest(X, y)
 
+        modelo = request.form['modelo']
         nombre = request.form['nombre']
         telefono = request.form['telefono']
         provincia = request.form['provincia']
-        permisos = request.form['permisos']
+        permisos = int(request.form['permisos'])
         total = int(request.form['total'])
         phishing = int(request.form['phishing'])
         cliclados = int(request.form['cliclados'])
-        modelo = request.form['modelo']
+
 
         es_critico = None
 
@@ -227,15 +228,24 @@ def predict():
         if modelo == 'regresion':
             resultado = Ejercicio5.predecir_regresion(regr_model, nombre, telefono, provincia, permisos,
                                                       total, phishing, cliclados)
-            es_critico = resultado == True
+            if resultado == True:
+                es_critico = True
+            else:
+                es_critico = False
         elif modelo == 'tree':
             resultado = Ejercicio5.predecir_decisionTree(tree_model, nombre, telefono, provincia, permisos,
                                                          total, phishing, cliclados)
-            es_critico = resultado == 1
+            if resultado == 1:
+                es_critico = True
+            else:
+                es_critico = False
         elif modelo == 'forest':
             resultado = Ejercicio5.predecirForest(forest_model, nombre, telefono, provincia, permisos, total,
                                                   phishing, cliclados)
-            es_critico = resultado == 1
+            if resultado == 1:
+                es_critico = True
+            else:
+                es_critico = False
         return render_template('resultado_prediccion.html', es_critico=es_critico)
 
 

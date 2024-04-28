@@ -8,6 +8,17 @@
 <body>
     <h1>Formulario de Predicción de Usuario Crítico</h1>
     <form action="/EJ5" method="post" id="predict-form">
+        <label for="modelo">Seleccionar modelo:</label><br>
+            <input type="radio" id="regresion" name="modelo" value="regresion"/>
+            <label for="regresion" >Regresión Lineal</label><br>
+
+            <input type="radio" id="tree" name="modelo" value="tree"/>
+            <label for="tree" >Decision Tree</label><br>
+
+            <input type="radio" id="forest" name="modelo" value="forest"/>
+            <label for="forest">Forest</label><br>
+        <br>
+
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br>
 
@@ -16,62 +27,62 @@
 
         <label for="provincia">Provincia:</label><br>
         <select class="form-control" name="provincia" id="provincia">
-            <option value="Alava">Alava</option>
-            <option value="Albacete">Albacete</option>
-            <option value="Alicante">Alicante</option>
-            <option value="Almeria">Almeria</option>
-            <option value="Asturias">Asturias</option>
-            <option value="Avila">Avila</option>
-            <option value="Badajoz">Badajoz</option>
-            <option value="Barcelona">Barcelona</option>
-            <option value="Burgos">Burgos</option>
-            <option value="Caceres">Caceres</option>
-            <option value="Cadiz">Cadiz</option>
-            <option value="Cantabria">Cantabria</option>
-            <option value="Castellon">Castellon</option>
-            <option value="Ciudad Real">Ciudad Real</option>
-            <option value="Cordoba">Cordoba</option>
-            <option value="Cuenca">Cuenca</option>
-            <option value="Gerona">Gerona</option>
-            <option value="Granada">Granada</option>
-            <option value="Guadalajara">Guadalajara</option>
-            <option value="Guipuzcoa">Guipuzcoa</option>
-            <option value="Huelva">Huelva</option>
-            <option value="Huesca">Huesca</option>
-            <option value="Islas Baleares">Islas Baleares</option>
-            <option value="Jaen">Jaen</option>
-            <option value="La Coruna">La Coruna</option>
-            <option value="La Rioja">La Rioja</option>
-            <option value="Las Palmas">Las Palmas</option>
-            <option value="Leon">Leon</option>
-            <option value="Lerida">Lerida</option>
-            <option value="Lugo">Lugo</option>
-            <option value="Madrid">Madrid</option>
-            <option value="Malaga">Malaga</option>
-            <option value="Murcia">Murcia</option>
-            <option value="Navarra">Navarra</option>
-            <option value="Orense">Orense</option>
-            <option value="Palencia">Palencia</option>
-            <option value="Pontevedra">Pontevedra</option>
-            <option value="Salamanca">Salamanca</option>
-            <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
-            <option value="Segovia">Segovia</option>
-            <option value="Sevilla">Sevilla</option>
-            <option value="Soria">Soria</option>
-            <option value="Tarragona">Tarragona</option>
-            <option value="Teruel">Teruel</option>
-            <option value="Toledo">Toledo</option>
-            <option value="Valencia">Valencia</option>
-            <option value="Valladolid">Valladolid</option>
-            <option value="Vizcaya">Vizcaya</option>
-            <option value="Zamora">Zamora</option>
-            <option value="Zaragoza">Zaragoza</option>
+            <option value="1">Alava</option>
+            <option value="2">Albacete</option>
+            <option value="3">Alicante</option>
+            <option value="4">Almeria</option>
+            <option value="5">Asturias</option>
+            <option value="6">Avila</option>
+            <option value="7">Badajoz</option>
+            <option value="8">Barcelona</option>
+            <option value="9">Burgos</option>
+            <option value="10">Caceres</option>
+            <option value="11">Cadiz</option>
+            <option value="12">Cantabria</option>
+            <option value="13">Castellon</option>
+            <option value="14">Ciudad Real</option>
+            <option value="15">Cordoba</option>
+            <option value="16">Cuenca</option>
+            <option value="17">Gerona</option>
+            <option value="18">Granada</option>
+            <option value="19">Guadalajara</option>
+            <option value="20">Guipuzcoa</option>
+            <option value="21">Huelva</option>
+            <option value="22">Huesca</option>
+            <option value="23">Islas Baleares</option>
+            <option value="24">Jaen</option>
+            <option value="25">La Coruna</option>
+            <option value="26">La Rioja</option>
+            <option value="27">Las Palmas</option>
+            <option value="28">Leon</option>
+            <option value="29">Lerida</option>
+            <option value="30">Lugo</option>
+            <option value="31">Madrid</option>
+            <option value="32">Malaga</option>
+            <option value="33">Murcia</option>
+            <option value="34">Navarra</option>
+            <option value="35">Orense</option>
+            <option value="36">Palencia</option>
+            <option value="37">Pontevedra</option>
+            <option value="38">Salamanca</option>
+            <option value="39">Santa Cruz de Tenerife</option>
+            <option value="40">Segovia</option>
+            <option value="41">Sevilla</option>
+            <option value="42">Soria</option>
+            <option value="43">Tarragona</option>
+            <option value="44">Teruel</option>
+            <option value="45">Toledo</option>
+            <option value="46">Valencia</option>
+            <option value="47">Valladolid</option>
+            <option value="48">Vizcaya</option>
+            <option value="49">Zamora</option>
+            <option value="50">Zaragoza</option>
         </select><br>
 
         <label for="permisos">Permisos:</label><br>
         <select id="permisos" name="permisos" required>
-            <option value="admin">Admin</option>
-            <option value="user">Usuario</option>
+            <option value="1">Admin</option>
+            <option value="0">Usuario</option>
         </select><br>
 
         <label for="total">Total de emails enviados:</label><br>
@@ -82,16 +93,6 @@
 
         <label for="cliclados">Total de emails cliclados:</label><br>
         <input type="number" id="cliclados" name="cliclados" required min="0"><br>
-
-        <label for="modelo">Seleccionar modelo:</label><br>
-            <input type="radio" id="reg" name="modelo" value="regresion"/>
-            <label for="regresion" >Regresión Lineal</label><br>
-
-            <input type="radio" id="tree" name="modelo" value="tree"/>
-            <label for="tree" >Decision Tree</label><br>
-
-            <input type="radio" id="forest" name="modelo" value="forest"/>
-            <label for="forest">Forest</label><br>
         <br>
         <input type="submit" value="Predecir">
     </form>
