@@ -7,10 +7,6 @@ from flask import Flask, render_template, request, make_response, send_file
 from Ejercicio1_Practica2.Ejercicio1 import usuariosCriticosGraf, paginaWebVulnerableGraf
 from Ejercicio2_Practica2.Ejercicio2 import usuariosCriticosMas50, usuariosCriticosMenos50
 from Ejercicio3_Practica2.Ejercicio3_Practica2 import obtener_ultimas_vulnerabilidades
-from Ejercicio4.Ej4_1 import generar_grafico1
-from Ejercicio4.Ej4_2 import generar_grafico2
-from Ejercicio4.Ej4_3 import generar_grafico3
-from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.DatosDeOtraAPI import noticasOtraAPI
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos, paginaWebVulnerable
 from fpdf import FPDF
@@ -71,30 +67,6 @@ def root3():
         return render_template('vulnerabilidades.html', vulnerabilidades=vulnerabilidades)
     else:
         return "Error al obtener las vulnerabilidades."
-
-
-@app.route('/EJ4/1')
-def root4_1():
-    img_bytes = generar_grafico1()
-    return send_file(img_bytes, mimetype='image/png')
-
-
-@app.route('/EJ4/2')
-def root4_2():
-    img_bytes = generar_grafico2()
-    return send_file(img_bytes, mimetype='image/png')
-
-
-@app.route('/EJ4/3')
-def root4_3():
-    img_bytes = generar_grafico3()
-    return send_file(img_bytes, mimetype='image/png')
-
-
-@app.route('/EJ4/4')
-def root4_4():
-    img_bytes = generar_grafico4()
-    return send_file(img_bytes, mimetype='image/png')
 
 
 @app.route('/GeneradorPDF_Ej4', methods=['GET', 'POST'])

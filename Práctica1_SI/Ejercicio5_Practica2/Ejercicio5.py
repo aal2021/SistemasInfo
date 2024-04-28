@@ -1,16 +1,10 @@
-import json
-import sqlite3
-
 import graphviz
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from sklearn import linear_model
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, mean_squared_error
+from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
 from sklearn import tree
 
 
@@ -39,6 +33,7 @@ def regresion(X, y):
 
     return model
 
+
 def predecir_regresion(model, nombre, telefono, provincia, permisos, total, phishing, cliclados):
     usuario = {
         'telefono': [telefono],
@@ -59,6 +54,7 @@ def predecir_regresion(model, nombre, telefono, provincia, permisos, total, phis
 
     return esCritico
 
+
 def decisionTree(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=75)
 
@@ -77,6 +73,7 @@ def decisionTree(X, y):
 
     return clf
 
+
 def predecir_decisionTree(clf, nombre, telefono, provincia, permisos, total, phishing, cliclados):
     usuario = {
         'telefono': [telefono],
@@ -91,6 +88,7 @@ def predecir_decisionTree(clf, nombre, telefono, provincia, permisos, total, phi
     prediccion_nuevo = clf.predict(df_usuario)
 
     return prediccion_nuevo
+
 
 def forest(X, y):
     # Entrenar el modelo de bosque aleatorio
@@ -112,6 +110,7 @@ def forest(X, y):
         graph.render('tree' + str(i))
 
     return clf
+
 
 def predecirForest(clf, nombre, telefono, provincia, permisos, total, phishing, cliclados):
     usuario = {
