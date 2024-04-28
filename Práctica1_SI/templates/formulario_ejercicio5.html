@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Formulario de Predicción de Usuario Crítico</h1>
-    <form action="/EJ5" method="post">
+    <form action="/EJ5" method="post" id="predict-form">
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br>
 
@@ -83,13 +83,16 @@
         <label for="cliclados">Total de emails cliclados:</label><br>
         <input type="number" id="cliclados" name="cliclados" required min="0"><br>
 
-        <label for="modelo">Seleccionar método de IA:</label><br>
-        <select id="modelo" name="modelo" required>
-            <option value="regresion">Regresión Lineal</option>
-            <option value="tree">Árbol de Decisión</option>
-            <option value="forest">Bosque Aleatorio</option>
-        </select><br><br>
+        <label for="modelo">Seleccionar modelo:</label><br>
+            <input type="radio" id="reg" name="modelo" value="regresion"/>
+            <label for="regresion" >Regresión Lineal</label><br>
 
+            <input type="radio" id="tree" name="modelo" value="tree"/>
+            <label for="tree" >Decision Tree</label><br>
+
+            <input type="radio" id="forest" name="modelo" value="forest"/>
+            <label for="forest">Forest</label><br>
+        <br>
         <input type="submit" value="Predecir">
     </form>
 </body>

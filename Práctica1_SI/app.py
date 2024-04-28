@@ -1,4 +1,7 @@
-import subprocess
+import sqlite3
+import pandas as pd
+import json
+from sklearn.preprocessing import LabelEncoder
 from flask import Flask, render_template, request, make_response, send_file
 
 from Ejercicio1_Practica2.Ejercicio1 import usuariosCriticosGraf, paginaWebVulnerableGraf
@@ -11,7 +14,9 @@ from Ejercicio4.Ej4_4 import generar_grafico4
 from Ejercicio4_Practica2.DatosDeOtraAPI import noticasOtraAPI
 from Ejercicio4_Practica2.GeneradorPDFs import usuariosCriticos, paginaWebVulnerable
 from fpdf import FPDF
+
 from Ejercicio5_Practica2 import Ejercicio5
+from Ejercicio5_Practica2.Ejercicio5 import regresion, decisionTree, forest
 
 app = Flask(__name__)
 
@@ -150,6 +155,63 @@ def predict():
     if request.method == 'GET':
         return render_template('formulario_ejercicio5.html')
     else:
+        # Conectar con la base de datos SQLite
+        conn = sqlite3.connect('datos.db')
+
+        # Leer los datos relevantes de la base de datos
+        df = pd.read_sql_query('''SELECT u.nombre_usuario, u.telefono, u.provincia, u.permisos, e.total, e.phishing, e.cliclados
+                                          FROM usuarios u
+                                          INNER JOIN emails e ON u.id_usuario = e.id_usuario
+                                          ''', conn)
+
+        for indice_fila, fila in df.iterrows():
+            for columna in df.columns:
+                # Verificar si el valor en la celda es 'None'
+                if fila[columna] == 'None':
+                    # Cambiar 'None' a None
+                    df.at[indice_fila, columna] = None
+
+        # df.replace(to_replace='None', value='hola')
+        # print(df)
+        df_sin_none = df.dropna()
+
+        # Copia del dataframe sin valores nulos
+        df_sin_none_copy = df_sin_none.copy()
+
+        # Inicializar el codificador de etiquetas
+        label_encoder = LabelEncoder()
+
+        # Ajustar y transformar la columna 'provincia' usando el codificador de etiquetas
+        df_sin_none_copy['provincia'] = label_encoder.fit_transform(df_sin_none_copy['provincia'])
+
+        # Mapeo de las etiquetas a las categorías originales
+        mappings = {index: label for index, label in enumerate(label_encoder.classes_)}
+
+        # Cargar el archivo users_data_online_clasificado.json
+        with open('users_data_online_clasificado.json') as f:
+            data_json = json.load(f)
+
+        # Convertir el JSON en un DataFrame
+        df_json = pd.DataFrame(data_json)
+
+        # Lista para almacenar los valores de 'criticos'
+        criticos_lista = []
+        for fila_json in df_json['usuarios']:
+            for nombre_usuario, datos_usuario in fila_json.items():
+                if nombre_usuario in df_sin_none['nombre_usuario'].values:
+                    critico = datos_usuario.get('critico', None)
+                    criticos_lista.append(critico)
+
+        # print(df.values)
+        # Separar las características (X) y las etiquetas (y)
+        X = df_sin_none_copy.drop(columns=['nombre_usuario'])  # Características: todas las columnas excepto 'critico'
+        # print(df_sin_none_copy['nombre_usuario'])
+        y = criticos_lista  # Etiquetas: columna 'critico'
+
+        regr_model = regresion(X, y)
+        tree_model = decisionTree(X, y)
+        forest_model = forest(X, y)
+
         nombre = request.form['nombre']
         telefono = request.form['telefono']
         provincia = request.form['provincia']
@@ -159,24 +221,22 @@ def predict():
         cliclados = int(request.form['cliclados'])
         modelo = request.form['modelo']
 
-        # Lógica para seleccionar el modelo y hacer la predicción
+        es_critico = None
+
+        # Seleccionar el modelo y hacer la predicción
         if modelo == 'regresion':
-            resultado = Ejercicio5.predecir_regresion(Ejercicio5.regr_model, nombre, telefono, provincia, permisos,
+            resultado = Ejercicio5.predecir_regresion(regr_model, nombre, telefono, provincia, permisos,
                                                       total, phishing, cliclados)
+            es_critico = resultado == True
         elif modelo == 'tree':
-            resultado = Ejercicio5.predecir_decisionTree(Ejercicio5.tree_model, nombre, telefono, provincia, permisos,
+            resultado = Ejercicio5.predecir_decisionTree(tree_model, nombre, telefono, provincia, permisos,
                                                          total, phishing, cliclados)
+            es_critico = resultado == 1
         elif modelo == 'forest':
-            resultado = Ejercicio5.predecirForest(Ejercicio5.forest_model, nombre, telefono, provincia, permisos, total,
+            resultado = Ejercicio5.predecirForest(forest_model, nombre, telefono, provincia, permisos, total,
                                                   phishing, cliclados)
-
-        if resultado:
-            mensaje = "El usuario es crítico."
-        else:
-            mensaje = "El usuario no es crítico."
-
-        return mensaje
-
+            es_critico = resultado == 1
+        return render_template('resultado_prediccion.html', es_critico=es_critico)
 
 
 if __name__ == '__main__':
